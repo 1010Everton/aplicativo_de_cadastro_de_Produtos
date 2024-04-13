@@ -1,0 +1,17 @@
+<table border="1">
+
+    <form action="/tabela" method="POSt">
+  <tr>
+    <th >Item Name</th>
+    <th>Item Description</th>
+    <th >Item Price</th>
+  </tr>
+  <tr>
+    {% for itens in item %}
+    <td>{itens}</td>
+    <td>{itens}</td>
+    <td>{itens}</td>
+    {% endfor %}
+  </tr>
+  </form>
+</table>
