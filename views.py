@@ -1,4 +1,5 @@
 from flask import render_template, request, redirect, session, flash, url_for
+from sqlalchemy import select
 
 from models import info
 from app import app, db
@@ -6,18 +7,20 @@ from app import app, db
 
 @app.route('/')
 def login():
-    proxima = request.args.get('proxima')
+    proxima = db.session.query(info.nome).all()
     return render_template('login.html', proxima=proxima)
 
 @app.route('/valida', methods=['POST',])
 def validacao():
-    usuario = info.query.filter_by(nickname=request.form['nome']).first()
-    if usuario:
-        if request.form['senha'] == usuario.senha:
-            session['usuario_logado'] = usuario.nickname
-            flash(usuario.nickname+'logado com sucesso')
-            proxima_pagina = request.form['cadastro']
-            return redirect(proxima_pagina)
+    usuario = info.query.filter_by(nome=request.form['nome']).first()
+    if usuario and request.form['nome'] == usuario.password:
+        session['usuario_logado'] = usuario.nome
+        flash(usuario.nome + ' logado com sucesso')
+        proxima_pagina = request.form['cadastro']
+        return redirect(proxima_pagina)
+    else:
+        flash('Nome de usuário ou senha inválidos')
+        return redirect(url_for('login'))
 
 @app.route('/cadastro')
 def cadastro():

@@ -7,6 +7,7 @@ app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
 db = SQLAlchemy(app)
+app.secret_key = "algoqueeunaosei"
 
 from views import *
 
