@@ -1,6 +1,6 @@
 {% extends "template.html" %}
 {% block conteudo %}
-    <form action="/criar" method="POST">
+    <form action="{{url_for('atualizar')}}}" method="POST">
 
           <h1 id="{{cadastro}}">campo de cadastro
           </h1>{% with messages = get_flashed_messages() %}
@@ -26,7 +26,6 @@
 
         <label for="cpf">cpf:</label><br />
       <input type="cpf" id="cpf" name="cpf" required><br />
-
 
       <input type="submit" value="Register" />
     </form>

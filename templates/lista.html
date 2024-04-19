@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Registration Form</title>
-     <link href="{{ url_for('static', filename='bootstrap.css') }}" rel="stylesheet">
-  </head>
-  <body>
+{% extends "template.html" %}
+{% block conteudo %}
     <form action="/submit_registration" method="post">
       <label for="name">produto:</label><br />
       <input type="text" id="name" name="name" required><br />
@@ -21,5 +15,4 @@
 
       <input type="submit" value="Register" />
     </form>
-  </body>
-</html>
+{% endblock %}

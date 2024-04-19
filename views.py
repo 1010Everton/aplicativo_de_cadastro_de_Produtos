@@ -4,23 +4,30 @@ from sqlalchemy import select
 from models import info
 from app import app, db
 
+@app.route('/tabela')
+def tabela():
+    lista = info.query.order_by(info.cpf)
+    if 'usuario_logado' not in session or session['usuario_logado'] is None:
+        return redirect(url_for('login', proxima=url_for('tabela')))
 
+    return render_template('tabela.html', registro=lista)
 @app.route('/')
 def login():
-    proxima = db.session.query(info.nome).all()
+    proxima = request.args.get('proxima')
     return render_template('login.html', proxima=proxima)
 
 @app.route('/valida', methods=['POST',])
 def validacao():
     usuario = info.query.filter_by(nome=request.form['nome']).first()
-    if usuario and request.form['nome'] == usuario.password:
-        session['usuario_logado'] = usuario.nome
-        flash(usuario.nome + ' logado com sucesso')
-        proxima_pagina = request.form['cadastro']
-        return redirect(proxima_pagina)
-    else:
-        flash('Nome de usuário ou senha inválidos')
-        return redirect(url_for('login'))
+    if usuario:
+        if request.form['password'] == usuario.password:
+            session["usuario_logado"] = usuario.nome
+            flash(usuario.nome + ' logado com sucesso')
+
+            return redirect (url_for('tabela'))
+        else:
+            flash("Nome de usuário ou senha inválidos")
+            return redirect(url_for('login'))
 
 @app.route('/cadastro')
 def cadastro():
@@ -30,6 +37,7 @@ def cadastrar():
     nome = request.form['nome']
     cpf = request.form['cpf']
     email = request.form['email']
+    senha = request.form['password']
     data_de_nascimento = request.form['birthday']
 
     dado = info.query.filter_by(cpf=cpf).first()
@@ -37,17 +45,24 @@ def cadastrar():
         flash('Jogo já existente!')
         return redirect(url_for('cadastro'))
 
-    novo_jogo = info(nome=nome, cpf=cpf, email=email, data_de_nascimento=data_de_nascimento)
+    novo_jogo = info(nome=nome, cpf=cpf, email=email, data_de_nascimento=data_de_nascimento, password=senha)
     db.session.add(novo_jogo)
     db.session.commit()
 
     return redirect(url_for('login'))
-@app.route('/tabela')
-def tabela():
-    if 'usuario_logado' not in session or session['usuario_logado'] is None:
-        return redirect('/')
-    return render_template('tabela.html')
+
 @app.route('/table', methods = ['POST',])
 def table():
     lista = info.query.order_by(info.cpf)
     return render_template('tabela.html', item=lista)
+
+@app.route('/atualizar', methods=['POST',])
+def atualizar():
+    pass
+@app.route('/editar')
+def editar():
+    lista = info.query.order_by(info.cpf)
+    if 'usuario_logado' not in session or session['usuario_logado'] is None:
+        return redirect(url_for('login', proxima=url_for('tabela')), registro=lista)
+
+    return render_template('tabela.html')
