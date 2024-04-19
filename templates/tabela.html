@@ -6,13 +6,13 @@
     <th>Item Description</th>
     <th >Item Price</th>
   </tr>
+      {% for registros in registro %}
   <tr>
-    {% for registros in registro %}
     <td>{{registros.nome}}</td>
     <td>{{registros.cpf}}</td>
     <td>{{registros.email}}</td>
     <td><a href="{{url_for('editar')}}">editar</a> </td>
-    {% endfor %}
   </tr>
+      {% endfor %}
   </form>
 </table>
