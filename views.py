@@ -58,11 +58,20 @@ def table():
 
 @app.route('/atualizar', methods=['POST',])
 def atualizar():
-    pass
-@app.route('/editar')
-def editar():
-    lista = info.query.order_by(info.cpf)
-    if 'usuario_logado' not in session or session['usuario_logado'] is None:
-        return redirect(url_for('login', proxima=url_for('tabela')), registro=lista)
+    jogo = info.query.filter_by(cpf=request.form['cpf']).first()
+    jogo.nome = request.form['nome']
+    jogo.cpf = request.form['cpf']
+    jogo.birthday = request.form['birthday']
+    jogo.email = request.form['email']
+    jogo.password = request.form['password']
 
-    return render_template('tabela.html')
+    db.session.add(jogo)
+    db.session.commit()
+
+    return redirect(url_for('tabela'))
+@app.route('/editar/<int:cpf>')
+def editar(cpf):
+    if 'usuario_logado' not in session or session['usuario_logado'] is None:
+        return redirect(url_for('login', proxima=url_for('tabela')))
+    ps = info.query.filter_by(cpf=cpf).first()
+    return render_template('editar.html', info=ps)

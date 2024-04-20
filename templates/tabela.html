@@ -1,3 +1,4 @@
+<link href="{{ url_for('static', filename='bootstrap.css') }}" rel="stylesheet">
 <table border="1">
 
     <form action="/tabela" method="POSt">
@@ -11,7 +12,7 @@
     <td>{{registros.nome}}</td>
     <td>{{registros.cpf}}</td>
     <td>{{registros.email}}</td>
-    <td><a href="{{url_for('editar')}}">editar</a> </td>
+    <td><a href="{{url_for('editar', cpf = registros.cpf)}}">editar</a> </td>
   </tr>
       {% endfor %}
   </form>
