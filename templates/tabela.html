@@ -13,6 +13,7 @@
     <td>{{registros.cpf}}</td>
     <td>{{registros.email}}</td>
     <td><a href="{{url_for('editar', cpf = registros.cpf)}}">editar</a> </td>
+      <td><a href="{{url_for('deletar', cpf = registros.cpf)}}">deletar</a> </td>
   </tr>
       {% endfor %}
   </form>

@@ -69,6 +69,17 @@ def atualizar():
     db.session.commit()
 
     return redirect(url_for('tabela'))
+@app.route('/deletar/<int:cpf>')
+def deletar(cpf):
+    if 'usuario_logado' not in session or session['usuario_logado'] is None:
+        return redirect(url_for('login'))
+    info.query.filter_by(cpf=cpf).delete()
+    db.session.commit()
+    flash('deletado com sucesso')
+
+    return redirect(url_for('tabela'))
+
+
 @app.route('/editar/<int:cpf>')
 def editar(cpf):
     if 'usuario_logado' not in session or session['usuario_logado'] is None:
