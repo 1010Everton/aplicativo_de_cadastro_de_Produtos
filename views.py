@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, session, flash, url_for
 from sqlalchemy import select
 
-from models import info
+from models import info, produto
 from app import app, db
 
 @app.route('/tabela')
@@ -24,7 +24,7 @@ def validacao():
             session["usuario_logado"] = usuario.nome
             flash(usuario.nome + ' logado com sucesso')
 
-            return redirect (url_for('tabela'))
+            return redirect(url_for('cadastro_do_produto'))
         else:
             flash("Nome de usuário ou senha inválidos")
             return redirect(url_for('login'))
@@ -32,6 +32,24 @@ def validacao():
 @app.route('/cadastro')
 def cadastro():
     return render_template('cadastro.html')
+@app.route('/cadastro_do_produto')
+def cadastro_do_produto():
+    return render_template('cadastro_de_produto.html')
+@app.route('/cadastro_produto', methods=['POST',])
+def cadastro_de_produtos():
+    nome_do_produto = request.form['nome_do_produto']
+    data_de_validade = request.form['data_de_validade']
+    data_de_fabricacao = request.form['data_de_fabricacao']
+    estoque = request.form['estoque']
+    produtos = produto.query.filter_by(estoque=estoque).first()
+    if produtos:
+        flash('produto já existe')
+        return redirect(url_for('cadastro_do_produto'))
+    insere = produto(nome_do_produto=nome_do_produto,data_de_validade=data_de_validade,data_de_fabricacao=data_de_fabricacao,estoque=estoque)
+    db.session.add(insere)
+    db.session.commit()
+    return redirect('tabela',)
+
 @app.route('/criar', methods=['POST',])
 def cadastrar():
     nome = request.form['nome']

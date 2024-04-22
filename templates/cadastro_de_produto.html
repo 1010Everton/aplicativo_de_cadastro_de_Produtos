@@ -1,0 +1,30 @@
+{% extends "template.html" %}
+{% block conteudo %}
+    <form action="/cadastro_produto" method="POST">
+    <input type="file" name="arquivo", accept="jpg">
+          <h1 id="{{cadastro}}">campo de cadastro
+          </h1>{% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+      {% endwith %}
+      <label for="nome_do_produto">name do produto:</label><br />
+      <input type="text" id="nome_do_produto" name="nome_do_produto" required><br />
+
+      <label for="data_de_validade">data de validade:</label><br />
+      <input type="date" id="data_de_validade" name="data_de_validade" required><br />
+
+      <label for="data_de_fabricacao">data de fabricação:</label><br />
+      <input type="date" id="data_de_fabricacao" name="data_de_fabricacao" required><br />
+
+      <label for="estoque">estoque:</label><br />
+      <input type="text" id="estoque" name="estoque" required><br />
+
+
+      <input type="submit" value="Register" />
+    </form>
+{% endblock %}

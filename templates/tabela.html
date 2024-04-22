@@ -9,11 +9,14 @@
   </tr>
       {% for registros in registro %}
   <tr>
-    <td>{{registros.nome}}</td>
-    <td>{{registros.cpf}}</td>
-    <td>{{registros.email}}</td>
+    <td>{{registros.id}}</td>
+    <td>{{registros.nome_do_produto}}</td>
+    <td>{{registros.data_de_validade}}</td>
+    <td>{{registros.data_de_fabricacao}}</td>
+    <td>{{registros.estoque}}</td>
     <td><a href="{{url_for('editar', cpf = registros.cpf)}}">editar</a> </td>
       <td><a href="{{url_for('deletar', cpf = registros.cpf)}}">deletar</a> </td>
+    <button hraf = url_for('cadastra')></button>
   </tr>
       {% endfor %}
   </form>
