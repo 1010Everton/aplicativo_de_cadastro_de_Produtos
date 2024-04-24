@@ -1,16 +1,17 @@
-from flask import render_template, request, redirect, session, flash, url_for
+from flask import render_template, request, redirect, session, flash, url_for, send_from_directory
 from sqlalchemy import select
 
+import config
 from models import info, produto
 from app import app, db
 
 @app.route('/tabela')
 def tabela():
-    lista = info.query.order_by(info.cpf)
     if 'usuario_logado' not in session or session['usuario_logado'] is None:
         return redirect(url_for('login', proxima=url_for('tabela')))
 
-    return render_template('tabela.html', registro=lista)
+    produtos = produto.query.all()
+    return render_template('tabela.html', produtos=produtos)
 @app.route('/')
 def login():
     proxima = request.args.get('proxima')
@@ -41,15 +42,21 @@ def cadastro_de_produtos():
     data_de_validade = request.form['data_de_validade']
     data_de_fabricacao = request.form['data_de_fabricacao']
     estoque = request.form['estoque']
+    id = request.form['id']
     produtos = produto.query.filter_by(estoque=estoque).first()
     if produtos:
         flash('produto já existe')
         return redirect(url_for('cadastro_do_produto'))
-    insere = produto(nome_do_produto=nome_do_produto,data_de_validade=data_de_validade,data_de_fabricacao=data_de_fabricacao,estoque=estoque)
+    insere = produto(nome_do_produto=nome_do_produto,data_de_validade=data_de_validade,data_de_fabricacao=data_de_fabricacao,estoque=estoque,id=id)
     db.session.add(insere)
     db.session.commit()
-    return redirect('tabela',)
 
+
+    arquivo = request.files['arquivo']
+    uploads_path = app.config['uploads_path']
+    arquivo.save(f'{uploads_path}/capa{insere.id}.jpg')
+
+    return redirect('tabela')
 @app.route('/criar', methods=['POST',])
 def cadastrar():
     nome = request.form['nome']
@@ -71,36 +78,41 @@ def cadastrar():
 
 @app.route('/table', methods = ['POST',])
 def table():
-    lista = info.query.order_by(info.cpf)
-    return render_template('tabela.html', item=lista)
+    lista = produto.query.order_by(produto.id)
+    return render_template('tabela.html', produto=lista)
 
 @app.route('/atualizar', methods=['POST',])
 def atualizar():
-    jogo = info.query.filter_by(cpf=request.form['cpf']).first()
-    jogo.nome = request.form['nome']
-    jogo.cpf = request.form['cpf']
-    jogo.birthday = request.form['birthday']
-    jogo.email = request.form['email']
-    jogo.password = request.form['password']
+    jogo = produto.query.filter_by(id=request.form['id']).first()
+    jogo.nome_do_produto = request.form['nome_do_produto']
+    jogo.data_de_validade = request.form['data_de_validade']
+    jogo.data_de_fabricacao = request.form['data_de_fabricacao']
+    jogo.estoque = request.form['estoque']
+    jogo.id = request.form['id']
 
     db.session.add(jogo)
     db.session.commit()
 
     return redirect(url_for('tabela'))
-@app.route('/deletar/<int:cpf>')
-def deletar(cpf):
+@app.route('/deletar/<int:id>')
+def deletar(id):
     if 'usuario_logado' not in session or session['usuario_logado'] is None:
         return redirect(url_for('login'))
-    info.query.filter_by(cpf=cpf).delete()
+    produto.query.filter_by(id=id).delete()
     db.session.commit()
     flash('deletado com sucesso')
 
     return redirect(url_for('tabela'))
 
 
-@app.route('/editar/<int:cpf>')
-def editar(cpf):
+@app.route('/editar/<int:id>')
+def editar(id):
     if 'usuario_logado' not in session or session['usuario_logado'] is None:
         return redirect(url_for('login', proxima=url_for('tabela')))
-    ps = info.query.filter_by(cpf=cpf).first()
-    return render_template('editar.html', info=ps)
+    id = produto.query.filter_by(id=id).first()
+    return render_template('editar.html', produto=id)
+
+@app.route('/uploads/<nome_arquivo>')
+def imagem(nome_arquivo):
+    return send_from_directory('uploads', nome_arquivo)
+

@@ -1,23 +1,35 @@
-<link href="{{ url_for('static', filename='bootstrap.css') }}" rel="stylesheet">
-<table border="1">
-
-    <form action="/tabela" method="POSt">
-  <tr>
-    <th >Item Name</th>
-    <th>Item Description</th>
-    <th >Item Price</th>
-  </tr>
-      {% for registros in registro %}
-  <tr>
-    <td>{{registros.id}}</td>
-    <td>{{registros.nome_do_produto}}</td>
-    <td>{{registros.data_de_validade}}</td>
-    <td>{{registros.data_de_fabricacao}}</td>
-    <td>{{registros.estoque}}</td>
-    <td><a href="{{url_for('editar', cpf = registros.cpf)}}">editar</a> </td>
-      <td><a href="{{url_for('deletar', cpf = registros.cpf)}}">deletar</a> </td>
-    <button hraf = url_for('cadastra')></button>
-  </tr>
-      {% endfor %}
-  </form>
-</table>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabela de Produtos</title>
+    <link href="{{ url_for('static', filename='bootstrap.css') }}" rel="stylesheet">
+</head>
+<body>
+    <table border="1">
+        <tr>
+            <th>Item Name</th>
+            <th>Item Description</th>
+            <th>Item Price</th>
+        </tr>
+        {% for produto in produtos %}
+    {% if produto %}
+        <tr>
+            <td>{{ produto.nome_do_produto }}</td>
+            <td>{{ produto.data_de_validade }}</td>
+            <td>{{ produto.data_de_fabricacao }}</td>
+            <td>{{ produto.estoque }}</td>
+            <td>{{ produto.id }}</td>
+            <td><a href="{{ url_for('editar', id=produto.id) }}">editar</a></td>
+            <td><a href="{{ url_for('deletar', id=produto.id) }}">deletar</a></td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="7">Nenhum produto encontrado.</td>
+        </tr>
+    {% endif %}
+{% endfor %}
+    </table>
+    <a href="{{ url_for('cadastro_do_produto') }}" class="btn btn-primary">Cadastrar Produto</a>
+</body>
+</html>

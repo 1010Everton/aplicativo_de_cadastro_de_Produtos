@@ -1,8 +1,15 @@
 {% extends "template.html" %}
 {% block conteudo %}
-    <form action="/cadastro_produto" method="POST">
-    <input type="file" name="arquivo", accept="jpg">
-          <h1 id="{{cadastro}}">campo de cadastro
+    <form action="/cadastro_produto" method="POST" enctype="multipart/form-data">
+        <figure class="img-thumbnail col-md-4">
+            <img class="img-fluid" src="{{url_for('imagem' , nome_arquivo='115035.jpg')}}"><figcaption>
+            <label class="fileContainer">
+                mudar capa
+            <input type="file" nome="arquivo" accept=".jpg">
+            </label>
+        </figcaption> </figure>
+    <input type="file" name="arquivo" accept="jpg">
+          <h1 id="{{cadastro_do_produto}}">campo de cadastro
           </h1>{% with messages = get_flashed_messages() %}
       {% if messages %}
         <ul class=flashes>
@@ -12,6 +19,7 @@
         </ul>
       {% endif %}
       {% endwith %}
+
       <label for="nome_do_produto">name do produto:</label><br />
       <input type="text" id="nome_do_produto" name="nome_do_produto" required><br />
 
@@ -23,6 +31,9 @@
 
       <label for="estoque">estoque:</label><br />
       <input type="text" id="estoque" name="estoque" required><br />
+
+        <label for="id">id:</label><br />
+      <input type="text" id="id" name="id" required><br />
 
 
       <input type="submit" value="Register" />

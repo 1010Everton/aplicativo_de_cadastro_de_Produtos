@@ -1,8 +1,8 @@
 {% extends "template.html" %}
 {% block conteudo %}
     <form action="{{url_for('atualizar')}}" method="POST">
-      <input type="hidden" name="cpf" value="{{info.cpf}}">
-          <h1 id="{{cadastro}}">campo de cadastro
+      <input type="hidden" name="id" value="{{produto.id}}">
+          <h1 id="{{cadastro_do_produto}}">campo de cadastro
           </h1>{% with messages = get_flashed_messages() %}
       {% if messages %}
         <ul class=flashes>
@@ -12,20 +12,20 @@
         </ul>
       {% endif %}
       {% endwith %}
-      <label for="nome">Name:</label><br />
-      <input type="text" id="nome" name="nome" required value="{{info.nome}}"><br />
+      <label for="nome_do_produto">Name:</label><br />
+      <input type="text" id="nome_do_produto" name="nome_do_produto" required value="{{produto.nome_do_produto}}"><br />
 
-      <label for="email">Email:</label><br />
-      <input type="text" id="email" name="email" required value="{{info.email}}"><br />
+      <label for="data_de_validade">Email:</label><br />
+      <input type="date" id="data_de_validade" name="data_de_validade" required value="{{info.data_de_validade}}"><br />
 
-      <label for="password">Password:</label><br />
-      <input type="text" id="password" name="password" required value="{{info.password}}"><br />
+      <label for="data_de_fabricacao">Password:</label><br />
+      <input type="date" id="data_de_fabricacao" name="data_de_fabricacao" required value="{{info.data_de_fabricacao}}"><br />
 
-      <label for="birthday">Birthday:</label><br />
-      <input type="date" id="birthday" name="birthday" required value="{{info.birthday}}"><br />
+      <label for="id">Birthday:</label><br />
+      <input type="text" id="id" name="id" required value="{{produto.id}}"><br />
 
-        <label for="cpf">cpf:</label><br />
-      <input type="text" id="cpf" name="cpf" required value="{{info.cpf}}"><br />
+        <label for="estoque">cpf:</label><br />
+      <input type="text" id="estoque" name="estoque" required value="{{produto.estoque}}"><br />
 
       <input type="submit" value="Register" />
     </form>
