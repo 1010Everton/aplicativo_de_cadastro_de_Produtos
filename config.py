@@ -7,4 +7,4 @@ SQLALCHEMY_DATABASE_URI ='mysql+mysqlconnector://{username}:{password}@{host}:{p
         port='3306',
         database_name='cadastro'
     )
-uploads_path =os.path.dirname(os.path.abspath(__file__)) + '/uploads'
+UPLOAD_PATH = os.path.dirname(os.path.abspath(__file__)) + '/uploads'

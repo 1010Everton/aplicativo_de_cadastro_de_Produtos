@@ -1,6 +1,8 @@
+import time
+
 from flask import render_template, request, redirect, session, flash, url_for, send_from_directory
 from sqlalchemy import select
-
+from helper import recupera_imagem, delete_imagem
 import config
 from models import info, produto
 from app import app, db
@@ -43,7 +45,7 @@ def cadastro_de_produtos():
     data_de_fabricacao = request.form['data_de_fabricacao']
     estoque = request.form['estoque']
     id = request.form['id']
-    produtos = produto.query.filter_by(estoque=estoque).first()
+    produtos = produto.query.filter_by(id=id).first()
     if produtos:
         flash('produto já existe')
         return redirect(url_for('cadastro_do_produto'))
@@ -51,10 +53,11 @@ def cadastro_de_produtos():
     db.session.add(insere)
     db.session.commit()
 
-
     arquivo = request.files['arquivo']
-    uploads_path = app.config['uploads_path']
-    arquivo.save(f'{uploads_path}/capa{insere.id}.jpg')
+    UPLOAD_PATH = app.config['UPLOAD_PATH']
+    timestamp = time.time()
+    deleta_arquivo = insere.id
+    arquivo.save(f'{UPLOAD_PATH}/115035{insere.id}-{timestamp}.jpg')
 
     return redirect('tabela')
 @app.route('/criar', methods=['POST',])
@@ -71,6 +74,7 @@ def cadastrar():
         return redirect(url_for('cadastro'))
 
     novo_jogo = info(nome=nome, cpf=cpf, email=email, data_de_nascimento=data_de_nascimento, password=senha)
+
     db.session.add(novo_jogo)
     db.session.commit()
 
@@ -110,9 +114,17 @@ def editar(id):
     if 'usuario_logado' not in session or session['usuario_logado'] is None:
         return redirect(url_for('login', proxima=url_for('tabela')))
     id = produto.query.filter_by(id=id).first()
-    return render_template('editar.html', produto=id)
+    capa_produto = recupera_imagem(id)
+    return render_template('editar.html', produto=id, cadastro_do_produto=capa_produto, capa_produto=capa_produto)
 
 @app.route('/uploads/<nome_arquivo>')
 def imagem(nome_arquivo):
     return send_from_directory('uploads', nome_arquivo)
+@app.route('/logout')
+def logout():
+    session['usuario_logado'] = None
+    flash('Logout efetuado com sucesso!')
+    return redirect(url_for('login'))
+
+
 

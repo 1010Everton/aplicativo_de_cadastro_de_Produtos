@@ -10,6 +10,7 @@ db = SQLAlchemy(app)
 app.secret_key = "algoqueeunaosei"
 
 from views import *
+from helper import *
 
 if __name__ == '__main__':
 

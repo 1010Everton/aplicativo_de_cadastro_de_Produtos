@@ -1,6 +1,15 @@
 {% extends "template.html" %}
 {% block conteudo %}
     <form action="{{url_for('atualizar')}}" method="POST">
+        <figure class="img thumbnail col-md-4">
+          <img class="img-fluid" src="{{ url_for('imagem', nome_arquivo=capa_produto) }}">
+          <figcaption>
+            <label class="fileContainer">
+              Mudar Capa
+              <input type="file" name="arquivo" accept=".jpg">
+            </label>
+          </figcaption>
+        </figure>
       <input type="hidden" name="id" value="{{produto.id}}">
           <h1 id="{{cadastro_do_produto}}">campo de cadastro
           </h1>{% with messages = get_flashed_messages() %}
@@ -16,10 +25,10 @@
       <input type="text" id="nome_do_produto" name="nome_do_produto" required value="{{produto.nome_do_produto}}"><br />
 
       <label for="data_de_validade">Email:</label><br />
-      <input type="date" id="data_de_validade" name="data_de_validade" required value="{{info.data_de_validade}}"><br />
+      <input type="date" id="data_de_validade" name="data_de_validade" required value="{{produto.data_de_validade}}"><br />
 
       <label for="data_de_fabricacao">Password:</label><br />
-      <input type="date" id="data_de_fabricacao" name="data_de_fabricacao" required value="{{info.data_de_fabricacao}}"><br />
+      <input type="date" id="data_de_fabricacao" name="data_de_fabricacao" required value="{{produto.data_de_fabricacao}}"><br />
 
       <label for="id">Birthday:</label><br />
       <input type="text" id="id" name="id" required value="{{produto.id}}"><br />
