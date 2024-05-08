@@ -19,21 +19,27 @@
         </ul>
       {% endif %}
       {% endwith %}
-
-      <label for="nome_do_produto">name do produto:</label><br />
-      <input type="text" id="nome_do_produto" name="nome_do_produto" required><br />
-
-      <label for="data_de_validade">data de validade:</label><br />
-      <input type="date" id="data_de_validade" name="data_de_validade" required><br />
-
-      <label for="data_de_fabricacao">data de fabricação:</label><br />
-      <input type="date" id="data_de_fabricacao" name="data_de_fabricacao" required><br />
-
-      <label for="estoque">estoque:</label><br />
-      <input type="text" id="estoque" name="estoque" required><br />
-
-        <label for="id">id:</label><br />
-      <input type="text" id="id" name="id" required><br />
+        {{ form.csrf_token() }}
+    <div>
+        {{form.nome_do_produto.label(class = "form.label")}}
+        {{form.nome_do_produto(class = "form.control")}}
+    </div>
+        <div>
+      {{form.data_de_validade.label(class = "form.label")}}
+        {{form.data_de_validade(class = "form.control")}}
+        </div>
+    <div>
+      {{form.data_de_fabricacao.label(class = "form.label")}}
+        {{form.data_de_fabricacao(class = "form.control")}}
+    </div>
+        <div>
+      {{form.estoque.label(class = "form.label")}}
+        {{form.estoque(class = "form.control")}}
+    </div>
+        <div>
+      {{form.id.label(class = "form.label")}}
+        {{form.id(class = "form.control")}}
+    </div>
 
 
       <input type="submit" value="Register" />

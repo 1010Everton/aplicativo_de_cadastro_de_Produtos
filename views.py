@@ -2,7 +2,7 @@ import time
 
 from flask import render_template, request, redirect, session, flash, url_for, send_from_directory
 from sqlalchemy import select
-from helper import recupera_imagem, delete_imagem
+from helper import recupera_imagem, delete_imagem, formulario_usuario, formulario_cadastro
 import config
 from models import info, produto
 from app import app, db
@@ -34,17 +34,19 @@ def validacao():
 
 @app.route('/cadastro')
 def cadastro():
-    return render_template('cadastro.html')
+    form = formulario_usuario()
+    return render_template('cadastro.html' , form=form)
 @app.route('/cadastro_do_produto')
 def cadastro_do_produto():
-    return render_template('cadastro_de_produto.html')
+    form = formulario_cadastro()
+    return render_template('cadastro_de_produto.html', form = form)
 @app.route('/cadastro_produto', methods=['POST',])
 def cadastro_de_produtos():
-    nome_do_produto = request.form['nome_do_produto']
-    data_de_validade = request.form['data_de_validade']
-    data_de_fabricacao = request.form['data_de_fabricacao']
-    estoque = request.form['estoque']
-    id = request.form['id']
+    nome_do_produto = request.nome_do_produto.data
+    data_de_validade = request.data_de_validade.data
+    data_de_fabricacao = request.data_de_fabricacao.data
+    estoque = request.estoque.data
+    id = request.id.data
     produtos = produto.query.filter_by(id=id).first()
     if produtos:
         flash('produto já existe')
@@ -62,11 +64,12 @@ def cadastro_de_produtos():
     return redirect('tabela')
 @app.route('/criar', methods=['POST',])
 def cadastrar():
-    nome = request.form['nome']
-    cpf = request.form['cpf']
-    email = request.form['email']
-    senha = request.form['password']
-    data_de_nascimento = request.form['birthday']
+    nome = request.name.data
+    cpf = request.cpf.data
+    email = request.email.data
+    senha = request.password.data
+    data_de_nascimento = request.data_de_nascimento.data
+
 
     dado = info.query.filter_by(cpf=cpf).first()
     if dado:

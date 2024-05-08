@@ -12,20 +12,30 @@
         </ul>
       {% endif %}
       {% endwith %}
-      <label for="nome">Name:</label><br />
-      <input type="text" id="nome" name="nome" required><br />
-
-      <label for="email">Email:</label><br />
-      <input type="text" id="email" name="email" required><br />
-
-      <label for="password">Password:</label><br />
-      <input type="text" id="password" name="password" required><br />
-
-      <label for="birthday">Birthday:</label><br />
-      <input type="date" id="birthday" name="birthday" required><br />
-
-        <label for="cpf">cpf:</label><br />
-      <input type="text" id="cpf" name="cpf" required><br />
+        {{ form.csrf_token() }}
+      <div class = 'form-group'>
+        {{form.name.label(class ="form-label")}}
+        {{form.name(class = "form-control")}}
+      </div>
+        <div class = 'form-group'>
+          {{form.password.label(class ="form-label")}}
+          {{form.password(class = "form-control")}}
+        </div>
+        <div class = 'form-group'>
+          {{form.email.label()}}
+          {{form.email(class = "form-control")}}
+        </div>
+        <div class = 'form-group'>
+          {{form.cpf.label()}}
+          {{form.cpf(class = "form-control")}}
+        </div>
+        <div class = 'form-group'>
+          {{form.data_de_nascimento.label()}}
+          {{form.data_de_nascimento(class = "form-control")}}
+        </div>
+        <div>
+          {{form.salvar(class ='btn btn-primary')}}
+        </div>
 
 
       <input type="submit" value="Register" />
